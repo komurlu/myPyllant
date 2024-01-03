@@ -74,15 +74,11 @@ def datetime_format(date: datetime, with_microseconds=False) -> str:
         return date.strftime("%Y-%m-%dT%H:%M:%S") + "Z"
 
 
-def datetime_parse(date_string: str, timezone: tzinfo) -> datetime:
+def datetime_parse(date_string: str) -> datetime:
     if "." in date_string:
-        return datetime.strptime(date_string, "%Y-%m-%dT%H:%M:%S.%fZ").replace(
-            tzinfo=timezone
-        )
+        return datetime.strptime(date_string, "%Y-%m-%dT%H:%M:%S.%fZ")
     else:
-        return datetime.strptime(date_string, "%Y-%m-%dT%H:%M:%SZ").replace(
-            tzinfo=timezone
-        )
+        return datetime.strptime(date_string, "%Y-%m-%dT%H:%M:%SZ")
 
 
 def get_realm(brand: str, country: str | None = None) -> str:
@@ -135,13 +131,13 @@ def prepare_field_value_for_dict(value):
 
 
 def get_default_holiday_dates(
-    start, end, timezone, default_holiday_duration=DEFAULT_HOLIDAY_DURATION
+    start, end, default_holiday_duration=DEFAULT_HOLIDAY_DURATION
 ) -> tuple[datetime, datetime]:
     """
     If no start or end date is given, use the current date and add the default holiday duration
     """
     if not start:
-        start = datetime.now(timezone)
+        start = datetime.now()
     if not end:
         end = start + timedelta(days=default_holiday_duration)
     return start, end
